@@ -8,24 +8,28 @@ const ctx = canvas.getContext('2d');
 
 const players = [
   {
-    x: canvas.width/2,
+    x: canvas.width/2 + (grid*2),
     y: canvas.height/2,
     size: 30,
     speed: 5,
-    color: 'red'
+    color: 'red',
+    cooldown: 0
   },
   {
-    x: canvas.width/2,
+    x: canvas.width/2 - (grid*2),
     y: canvas.height/2,
     size: 30,
     speed: 5,
-    color: 'blue'
+    color: 'blue',
+    cooldown: 0
   }
 ];
 
 
 const game = {
-  req: ''
+  req: '',
+  bullets: [],
+  bulletSpeed: 5
 };
 
 const keyz = {
@@ -45,6 +49,19 @@ document.addEventListener('keydown', (e) => {
     keyz[e.code]= true;
     console.log(keyz);
   }
+
+  if(e.code == 'Space' && players[0].cooldown <= 0) {
+    players[0].cooldown = 10;
+    game.bullets.push(
+      {
+        x: players[0].x - 40,
+        y: players[0].y,
+        speed: -game.bulletSpeed,
+        size: 10,
+        color: 'green'
+      }
+    )
+  }
 });
 
 document.addEventListener('keyup', (e) => {
@@ -61,28 +78,28 @@ game.req = requestAnimationFrame(draw);
 // });
 
 function movementPlayer() {
-  if( keyz['ArrowLeft']) {
+  if( keyz['ArrowLeft'] && players[0].x > canvas.width/2 + players[0].size) {
     players[0].x -= players[0].speed;
   }
-  if( keyz['ArrowRight']) {
+  if( keyz['ArrowRight'] && players[0].x < canvas.width - players[0].size) {
     players[0].x += players[0].speed;
   }
-  if( keyz['ArrowUp']) {
+  if( keyz['ArrowUp'] && players[0].y > 0 + players[0].size ){
     players[0].y -= players[0].speed;
   }
-  if( keyz['ArrowDown']) {
+  if( keyz['ArrowDown'] && players[0].y < canvas.height - players[0].size ) {
     players[0].y += players[0].speed;
   }
-  if( keyz['KeyA']) {
+  if( keyz['KeyA'] && players[1].x > 0 + players[1].size) {
     players[1].x -= players[1].speed;
   }
-  if( keyz['KeyD']) {
+  if( keyz['KeyD'] && players[1].x < canvas.width/2 - players[1].size) {
     players[1].x += players[1].speed;
   }
-  if( keyz['KeyS']) {
+  if( keyz['KeyS'] & players[1].y < canvas.height - players[1].size ) {
     players[1].y += players[1].speed;
   }
-  if( keyz['KeyW']) {
+  if( keyz['KeyW'] && players[1].y > 0 + players[1].size) {
     players[1].y -= players[1].speed;
   }
 }
@@ -92,7 +109,27 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // console.log(player.x);
   movementPlayer();
+
+  game.bullets.forEach((bull, index) => {
+    ctx.fillStyle = bull.color;
+    ctx.fillRect(bull.x, bull.y, bull.size, bull.size);
+    bull.x +=bull.speed;
+    // remove bullet when is outside the screen
+    if ( bull.x<0) {
+      game.bullets.splice(index, 1);
+    }
+  });
+  //line
+  ctx.beginPath()
+  ctx.moveTo(canvas.width/2, 0);
+  ctx.lineTo(canvas.width/2, canvas.height);
+  ctx.stroke();
+  ctx.closePath();
   players.forEach( player => {
+    if ( player.cooldown > 0 ) {
+      player.cooldown --;
+    }
+
     ctx.beginPath();
     ctx.fillStyle = player.color;
     ctx.arc(player.x, player.y, player.size, 0, Math.PI*2, true);    ctx.fill();
