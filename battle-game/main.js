@@ -104,6 +104,12 @@ function movementPlayer() {
   }
 }
 
+function colDetection(obj1, obj2){
+  //console.log(obj1.x, obj1.y)
+  //console.log(obj2.x, obj2.y)
+  return obj1.x <= obj2.x + obj2.size && obj1.x + obj1.size >= obj2.x &&
+    obj1.y <= obj2.y + obj2.size && obj1.y + obj1.size >= obj2.y;
+}
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -118,6 +124,13 @@ function draw() {
     if ( bull.x<0) {
       game.bullets.splice(index, 1);
     }
+
+    players.forEach((player, pindex)=>{
+      if ( colDetection(bull, player) ) {
+        console.log('hit', pindex);
+        game.bullets.splice(index, 1);
+      }
+    })
   });
   //line
   ctx.beginPath()
