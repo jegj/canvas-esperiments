@@ -44,7 +44,7 @@ const keyz = {
 };
 
 document.addEventListener('keydown', (e) => {
-  console.log(e);
+  // console.log(e);
   if ( e.code in keyz ){
     keyz[e.code]= true;
     console.log(keyz);
@@ -67,7 +67,7 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
   if ( e.code in keyz ){
     keyz[e.code]= false;
-    console.log(keyz);
+    // console.log(keyz);
   }
 });
 
