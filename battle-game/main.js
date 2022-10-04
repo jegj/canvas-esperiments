@@ -10,26 +10,29 @@ const players = [
   {
     x: canvas.width/2 + (grid*2),
     y: canvas.height/2,
-    size: 30,
-    speed: 5,
+    size: grid/2+5,
+    speed: grid/8,
     color: 'red',
-    cooldown: 0
+    cooldown: 0,
+    score: 0,
+    pos: canvas.width / 2 + canvas.width/4
   },
   {
     x: canvas.width/2 - (grid*2),
     y: canvas.height/2,
-    size: 30,
-    speed: 5,
+    size: grid/2+5,
+    speed: grid/8,
     color: 'blue',
-    cooldown: 0
+    cooldown: 0,
+    score: 0,
+    pos: canvas.width/4
   }
 ];
-
 
 const game = {
   req: '',
   bullets: [],
-  bulletSpeed: 5
+  bulletSpeed: grid/10
 };
 
 const keyz = {
@@ -57,7 +60,7 @@ document.addEventListener('keydown', (e) => {
         x: players[0].x - 40,
         y: players[0].y,
         speed: -game.bulletSpeed,
-        size: 10,
+        size: grid/8,
         color: 'green'
       }
     )
@@ -70,7 +73,6 @@ document.addEventListener('keyup', (e) => {
     // console.log(keyz);
   }
 });
-
 
 game.req = requestAnimationFrame(draw);
 // canvas.addEventListener('click', () => {
@@ -129,6 +131,8 @@ function draw() {
     players.forEach((player, pindex)=>{
       if ( colDetection(bull, player) ) {
         console.log('hit', pindex);
+        if (pindex === 0) players[1].score++;
+        else if(pindex === 1) players[0].score ++;
         game.bullets.splice(index, 1);
       }
     })
@@ -143,6 +147,11 @@ function draw() {
     if ( player.cooldown > 0 ) {
       player.cooldown --;
     }
+
+    ctx.font = `${Math.ceil(grid/2)+5}px serif`;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = player.color;
+    ctx.fillText(`Score: ${player.score}`, player.pos, 50);
 
     ctx.beginPath();
     ctx.fillStyle = player.color;
