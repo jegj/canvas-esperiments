@@ -47,7 +47,7 @@ document.addEventListener('keydown', (e) => {
   // console.log(e);
   if ( e.code in keyz ){
     keyz[e.code]= true;
-    console.log(keyz);
+    // console.log(keyz);
   }
 
   if(e.code == 'Space' && players[0].cooldown <= 0) {
@@ -105,10 +105,11 @@ function movementPlayer() {
 }
 
 function colDetection(obj1, obj2){
-  //console.log(obj1.x, obj1.y)
-  //console.log(obj2.x, obj2.y)
-  return obj1.x <= obj2.x + obj2.size && obj1.x + obj1.size >= obj2.x &&
-    obj1.y <= obj2.y + obj2.size && obj1.y + obj1.size >= obj2.y;
+  // FIXME: Collision detection between circle and rectangle
+  return obj1.x <= obj2.x + obj2.size &&
+         obj1.x + obj1.size >= obj2.x &&
+         obj1.y <= obj2.y + obj2.size &&
+         obj1.y + obj1.size*2 >= obj2.y;
 }
 
 function draw() {
