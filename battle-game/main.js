@@ -75,9 +75,6 @@ document.addEventListener('keyup', (e) => {
 });
 
 game.req = requestAnimationFrame(draw);
-// canvas.addEventListener('click', () => {
-//   player.speed *= -1;
-// });
 
 function movementPlayer() {
   if( keyz['ArrowLeft'] && players[0].x > canvas.width/2 + players[0].size) {
@@ -157,8 +154,6 @@ function draw() {
     ctx.fillStyle = player.color;
     ctx.arc(player.x, player.y, player.size, 0, Math.PI*2, true);    ctx.fill();
     ctx.fill();
-    // ctx.fillStyle = 'blue';
-    // ctx.fillRect(player.x, player.y, 5, 5);
   })
   game.req = requestAnimationFrame(draw)
 }
